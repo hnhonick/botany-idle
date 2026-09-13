@@ -72,6 +72,7 @@ let upgradePurchased = false;
 
 const energyDisplay = document.getElementById("energy");
 const energyGoalDisplay = document.getElementById("energyGoal");
+const efficiencyDisplay = document.getElementById("efficiency");
 const stageDisplay = document.getElementById("stage");
 const moistureDisplay = document.getElementById("moisture");
 const passiveRateDisplay = document.getElementById("passiveRate");
