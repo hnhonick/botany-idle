@@ -4,15 +4,15 @@ const stages = [
     threshold: 0,
     nextThreshold: 10,
     passiveRate: 0,
-    visual: "🌱",
-    message: "A seed is waiting. Give it some light."
+    visual: "•",
+    message: "A sunflower seed is waiting. Give it some light."
   },
   {
     name: "Germination",
     threshold: 10,
     nextThreshold: 25,
     passiveRate: 0,
-    visual: "🌱",
+    visual: "◔",
     message: "Germination has begun."
   },
   {
@@ -28,7 +28,7 @@ const stages = [
     threshold: 50,
     nextThreshold: 90,
     passiveRate: 0.5,
-    visual: "🌿",
+    visual: "🌱",
     message: "The first leaves have opened. Passive photosynthesis has begun."
   },
   {
@@ -44,7 +44,7 @@ const stages = [
     threshold: 140,
     nextThreshold: 200,
     passiveRate: 1,
-    visual: "🌻",
+    visual: "🌿",
     message: "A flower bud has formed."
   },
   {
@@ -66,9 +66,11 @@ const stages = [
 ];
 
 let energy = 0;
-let moisture = "Not needed yet";
+let moisture = 60;
 let currentStageIndex = 0;
 let upgradePurchased = false;
+let shuttersOpened = false;
+let waterUnlocked = false;
 
 const energyDisplay = document.getElementById("energy");
 const energyGoalDisplay = document.getElementById("energyGoal");
@@ -77,17 +79,39 @@ const moistureDisplay = document.getElementById("moisture");
 const efficiencyDisplay = document.getElementById("efficiency");
 const passiveRateDisplay = document.getElementById("passiveRate");
 const plantVisual = document.getElementById("plantVisual");
+const plantDisplay = document.getElementById("plantDisplay");
 const lightButton = document.getElementById("lightButton");
 const waterButton = document.getElementById("waterButton");
+const openShuttersButton = document.getElementById("openShuttersButton");
+const shutters = document.getElementById("shutters");
+const sun = document.getElementById("sun");
 const growthProgress = document.getElementById("growthProgress");
 const messageDisplay = document.getElementById("message");
+const moistureStat = document.getElementById("moistureStat");
+const efficiencyStat = document.getElementById("efficiencyStat");
+const moistureMeterContainer = document.getElementById("moistureMeterContainer");
+const moistureMarker = document.getElementById("moistureMarker");
 
 function getCurrentStage() {
   return stages[currentStageIndex];
 }
 
+function getMoistureStatus() {
+  if (moisture < 40) {
+    return "Low";
+  }
+
+  if (moisture <= 70) {
+    return "Good";
+  }
+
+  return "Saturated";
+}
+
 function getPhotosynthesisEfficiency() {
-  if (moisture === "Low" || moisture === "Saturated") {
+  const status = getMoistureStatus();
+
+  if (status === "Low" || status === "Saturated") {
     return 0.5;
   }
 
@@ -101,9 +125,20 @@ function getPassiveRate() {
     rate *= 1.25;
   }
 
-  rate *= getPhotosynthesisEfficiency();
+  if (waterUnlocked) {
+    rate *= getPhotosynthesisEfficiency();
+  }
 
   return rate;
+}
+
+function unlockWater() {
+  waterUnlocked = true;
+
+  waterButton.hidden = false;
+  moistureStat.hidden = false;
+  efficiencyStat.hidden = false;
+  moistureMeterContainer.hidden = false;
 }
 
 function updateStage() {
@@ -116,9 +151,8 @@ function updateStage() {
     const newStage = getCurrentStage();
     messageDisplay.textContent = newStage.message;
 
-    if (newStage.name === "Sprout") {
-      moisture = "Good";
-      waterButton.hidden = false;
+    if (newStage.name === "Sprout" && !waterUnlocked) {
+      unlockWater();
     }
   }
 }
@@ -127,13 +161,20 @@ function updateUI() {
   const stage = getCurrentStage();
   const passiveRate = getPassiveRate();
   const efficiency = getPhotosynthesisEfficiency();
+  const moistureStatus = getMoistureStatus();
 
   energyDisplay.textContent = energy.toFixed(1);
   stageDisplay.textContent = stage.name;
-  moistureDisplay.textContent = moisture;
-  efficiencyDisplay.textContent = `${Math.round(efficiency * 100)}%`;
   passiveRateDisplay.textContent = passiveRate.toFixed(2);
   plantVisual.textContent = stage.visual;
+
+  if (waterUnlocked) {
+    moistureDisplay.textContent = moistureStatus;
+    efficiencyDisplay.textContent =
+      `${Math.round(efficiency * 100)}%`;
+
+    moistureMarker.style.left = `${moisture}%`;
+  }
 
   if (stage.nextThreshold !== null) {
     energyGoalDisplay.textContent = stage.nextThreshold;
@@ -150,12 +191,40 @@ function updateUI() {
   }
 }
 
+function openShutters() {
+  shuttersOpened = true;
+
+  shutters.classList.remove("closed");
+  shutters.classList.add("open");
+
+  plantDisplay.classList.remove("dimmed");
+
+  openShuttersButton.hidden = true;
+  lightButton.hidden = false;
+  sun.hidden = false;
+
+  plantVisual.textContent = getCurrentStage().visual;
+
+  messageDisplay.textContent =
+    "A sunflower seed is waiting. Give it some light.";
+
+  updateUI();
+}
+
 function provideLight() {
+  if (!shuttersOpened) {
+    return;
+  }
+
   if (currentStageIndex === stages.length - 1) {
     return;
   }
 
-  const efficiency = getPhotosynthesisEfficiency();
+  let efficiency = 1;
+
+  if (waterUnlocked) {
+    efficiency = getPhotosynthesisEfficiency();
+  }
 
   energy += 1 * efficiency;
 
@@ -164,21 +233,28 @@ function provideLight() {
 }
 
 function waterPlant() {
-  if (moisture === "Low") {
-    moisture = "Good";
-  } else if (moisture === "Good") {
-    moisture = "Saturated";
-  } else if (moisture === "Saturated") {
-    moisture = "Saturated";
+  if (!waterUnlocked) {
+    return;
+  }
+
+  moisture += 30;
+
+  if (moisture > 100) {
+    moisture = 100;
   }
 
   updateUI();
 }
 
+openShuttersButton.addEventListener("click", openShutters);
 lightButton.addEventListener("click", provideLight);
 waterButton.addEventListener("click", waterPlant);
 
 setInterval(() => {
+  if (!shuttersOpened) {
+    return;
+  }
+
   if (currentStageIndex === stages.length - 1) {
     return;
   }
@@ -193,13 +269,15 @@ setInterval(() => {
 }, 1000);
 
 setInterval(() => {
-  if (moisture === "Saturated") {
-    moisture = "Good";
-  } else if (moisture === "Good") {
-    moisture = "Low";
+  if (!waterUnlocked) {
+    return;
+  }
+
+  if (moisture > 0) {
+    moisture -= 1;
   }
 
   updateUI();
-}, 30000);
+}, 3000);
 
 updateUI();
