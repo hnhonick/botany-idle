@@ -148,7 +148,7 @@ function playGrowthAnimation() {
 
   plantVisual.classList.add("grow-pulse");
 }
-  
+
 function updateStage() {
   while (
     currentStageIndex < stages.length - 1 &&
@@ -180,26 +180,27 @@ function updateUI() {
   plantVisual.textContent = stage.visual;
 
   if (waterUnlocked) {
-  moistureDisplay.textContent = moistureStatus;
+    moistureDisplay.textContent = moistureStatus;
 
-  efficiencyDisplay.textContent =
-    ${Math.round(efficiency * 100)}%;
+    efficiencyDisplay.textContent =
+      `${Math.round(efficiency * 100)}%`;
 
-  moistureMarker.style.left = ${moisture}%;
-}
-  
+    moistureMarker.style.left = `${moisture}%`;
+  }
+
   if (stage.nextThreshold !== null) {
-  energyGoalDisplay.textContent = stage.nextThreshold;
+    energyGoalDisplay.textContent = stage.nextThreshold;
 
-  growthProgress.max =
-    stage.nextThreshold - stage.threshold;
+    growthProgress.max =
+      stage.nextThreshold - stage.threshold;
 
-  growthProgress.value =
-    energy - stage.threshold;
-} else {
-  energyGoalDisplay.textContent = "Complete";
-  growthProgress.max = 1;
-  growthProgress.value = 1;
+    growthProgress.value =
+      energy - stage.threshold;
+  } else {
+    energyGoalDisplay.textContent = "Complete";
+    growthProgress.max = 1;
+    growthProgress.value = 1;
+  }
 }
 
 function openShutters() {
@@ -238,7 +239,7 @@ function provideLight() {
   }
 
   energy += 1 * efficiency;
-  
+
   updateStage();
   updateUI();
 }
