@@ -141,6 +141,14 @@ function unlockWater() {
   moistureMeterContainer.hidden = false;
 }
 
+function playGrowthAnimation() {
+  plantVisual.classList.remove("grow-pulse");
+
+  void plantVisual.offsetWidth;
+
+  plantVisual.classList.add("grow-pulse");
+  ]
+  
 function updateStage() {
   while (
     currentStageIndex < stages.length - 1 &&
@@ -149,7 +157,10 @@ function updateStage() {
     currentStageIndex += 1;
 
     const newStage = getCurrentStage();
+
     messageDisplay.textContent = newStage.message;
+
+    playGrowthAnimation();
 
     if (newStage.name === "Sprout" && !waterUnlocked) {
       unlockWater();
