@@ -166,6 +166,24 @@ progress {
     opacity 0.4s ease;
 }
 
+.plant-visual.grow-pulse {
+  animation: growPulse 0.6s ease;
+}
+
+@keyframes growPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.18);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 .pot {
   font-size: 86px;
   line-height: 1;
