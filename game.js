@@ -72,9 +72,9 @@ let upgradePurchased = false;
 
 const energyDisplay = document.getElementById("energy");
 const energyGoalDisplay = document.getElementById("energyGoal");
-const efficiencyDisplay = document.getElementById("efficiency");
 const stageDisplay = document.getElementById("stage");
 const moistureDisplay = document.getElementById("moisture");
+const efficiencyDisplay = document.getElementById("efficiency");
 const passiveRateDisplay = document.getElementById("passiveRate");
 const plantVisual = document.getElementById("plantVisual");
 const lightButton = document.getElementById("lightButton");
@@ -84,6 +84,26 @@ const messageDisplay = document.getElementById("message");
 
 function getCurrentStage() {
   return stages[currentStageIndex];
+}
+
+function getPhotosynthesisEfficiency() {
+  if (moisture === "Low" || moisture === "Saturated") {
+    return 0.5;
+  }
+
+  return 1;
+}
+
+function getPassiveRate() {
+  let rate = getCurrentStage().passiveRate;
+
+  if (upgradePurchased) {
+    rate *= 1.25;
+  }
+
+  rate *= getPhotosynthesisEfficiency();
+
+  return rate;
 }
 
 function updateStage() {
@@ -103,27 +123,15 @@ function updateStage() {
   }
 }
 
-function getPassiveRate() {
-  let rate = getCurrentStage().passiveRate;
-
-  if (upgradePurchased) {
-    rate *= 1.25;
-  }
-
-  if (moisture === "Low" || moisture === "Saturated") {
-    rate *= 0.5;
-  }
-
-  return rate;
-}
-
 function updateUI() {
   const stage = getCurrentStage();
   const passiveRate = getPassiveRate();
+  const efficiency = getPhotosynthesisEfficiency();
 
   energyDisplay.textContent = energy.toFixed(1);
   stageDisplay.textContent = stage.name;
   moistureDisplay.textContent = moisture;
+  efficiencyDisplay.textContent = `${Math.round(efficiency * 100)}%`;
   passiveRateDisplay.textContent = passiveRate.toFixed(2);
   plantVisual.textContent = stage.visual;
 
@@ -147,7 +155,10 @@ function provideLight() {
     return;
   }
 
-  energy += 1;
+  const efficiency = getPhotosynthesisEfficiency();
+
+  energy += 1 * efficiency;
+
   updateStage();
   updateUI();
 }
