@@ -4,7 +4,7 @@ const stages = [
     threshold: 0,
     nextThreshold: 10,
     passiveRate: 0,
-    visual: "•",
+    visual: "🌰",
     message: "A sunflower seed is waiting. Give it some light."
   },
   {
@@ -12,7 +12,7 @@ const stages = [
     threshold: 10,
     nextThreshold: 25,
     passiveRate: 0,
-    visual: "◔",
+    visual: "🌰〰️",
     message: "Germination has begun."
   },
   {
@@ -28,7 +28,7 @@ const stages = [
     threshold: 50,
     nextThreshold: 90,
     passiveRate: 0.5,
-    visual: "🌱",
+    visual: "🌱🌿",
     message: "The first leaves have opened. Passive photosynthesis has begun."
   },
   {
@@ -44,7 +44,7 @@ const stages = [
     threshold: 140,
     nextThreshold: 200,
     passiveRate: 1,
-    visual: "🌿",
+    visual: "🌿🟢",
     message: "A flower bud has formed."
   },
   {
