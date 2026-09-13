@@ -171,9 +171,9 @@ function updateUI() {
   if (waterUnlocked) {
     moistureDisplay.textContent = moistureStatus;
     efficiencyDisplay.textContent =
-      `${Math.round(efficiency * 100)}%`;
+      ${Math.round(efficiency * 100)}%;
 
-    moistureMarker.style.left = `${moisture}%`;
+    moistureMarker.style.left = ${moisture}%;
   }
 
   if (stage.nextThreshold !== null) {
