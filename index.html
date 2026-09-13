@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Seed & Sun</title>
 
   <link rel="stylesheet" href="style.css">
@@ -29,30 +30,73 @@
           <span id="stage">Seed</span>
         </p>
 
-        <p>
+        <p id="moistureStat" hidden>
           <strong>Moisture:</strong>
-          <span id="moisture">Not needed yet</span>
+          <span id="moisture">Good</span>
         </p>
-        
-        <p>
+
+        <p id="efficiencyStat" hidden>
           <strong>Photosynthesis Efficiency:</strong>
           <span id="efficiency">100%</span>
         </p>
-        
+
         <p>
           <strong>Photosynthesis:</strong>
           <span id="passiveRate">0</span>
           energy/sec
         </p>
-        
       </div>
 
-      <div class="window">
-        <div class="sun">☀️</div>
+      <div
+        id="moistureMeterContainer"
+        class="moisture-meter-container"
+        hidden
+      >
+        <div class="moisture-labels">
+          <span>Dry</span>
+          <span>Good</span>
+          <span>Saturated</span>
+        </div>
 
-        <div class="plant-display">
-          <div id="plantVisual" class="plant-visual">
-            🌱
+        <div class="moisture-meter">
+          <div class="good-zone"></div>
+          <div
+            id="moistureMarker"
+            class="moisture-marker">
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="windowScene"
+      >
+        <div
+          class="shutters closed"
+          id="shutters"
+        >
+          <div class="shutter shutter-left"></div>
+          <div class="shutter shutter-right"></div>
+          <div class="light-crack"></div>
+        </div>
+
+        <div
+          class="sun"
+          id="sun"
+          hidden
+        >
+          ☀️
+        </div>
+
+        <div
+          class="plant-display dimmed"
+          id="plantDisplay"
+        >
+          <div
+            id="plantVisual"
+            class="plant-visual"
+          >
+            ·
           </div>
 
           <div class="pot">
@@ -62,11 +106,21 @@
       </div>
 
       <div class="controls">
-        <button id="lightButton">
+        <button id="openShuttersButton">
+          Open Shutters
+        </button>
+
+        <button
+          id="lightButton"
+          hidden
+        >
           Provide Light
         </button>
 
-        <button id="waterButton" hidden>
+        <button
+          id="waterButton"
+          hidden
+        >
           Water
         </button>
       </div>
@@ -86,8 +140,9 @@
       <div
         id="message"
         class="message"
-        aria-live="polite">
-        A seed is waiting. Give it some light.
+        aria-live="polite"
+      >
+        Something is waiting in the dark.
       </div>
     </section>
   </main>
