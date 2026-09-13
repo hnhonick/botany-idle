@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botany Idle</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="game">
+    <header class="game-header">
+      <h1>Botany Idle</h1>
+      <p>Grow plants, discover species, and learn how they work.</p>
+    </header>
+
+    <section class="plant-area">
+      <div class="stats">
+        <p>
+          <strong>Stored Energy:</strong>
+          <span id="energy">0</span>
+          /
+          <span id="energyGoal">10</span>
+        </p>
+
+        <p>
+          <strong>Growth Stage:</strong>
+          <span id="stage">Seed</span>
+        </p>
+
+        <p>
+          <strong>Moisture:</strong>
+          <span id="moisture">Not needed yet</span>
+        </p>
+
+        <p>
+          <strong>Photosynthesis:</strong>
+          <span id="passiveRate">0</span>
+          energy/sec
+        </p>
+      </div>
+
+      <div class="window">
+        <div class="sun">☀️</div>
+
+        <div class="plant-display">
+          <div id="plantVisual" class="plant-visual">
+            🌱
+          </div>
+
+          <div class="pot">
+            🪴
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="lightButton">
+          Provide Light
+        </button>
+
+        <button id="waterButton" hidden>
+          Water
+        </button>
+      </div>
+
+      <div class="progress-section">
+        <label for="growthProgress">
+          Progress to next stage
+        </label>
+
+        <progress
+          id="growthProgress"
+          value="0"
+          max="10">
+        </progress>
+      </div>
+
+      <div
+        id="message"
+        class="message"
+        aria-live="polite">
+        A seed is waiting. Give it some light.
+      </div>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
